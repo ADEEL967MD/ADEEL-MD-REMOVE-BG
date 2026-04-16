@@ -21,7 +21,6 @@
       position: relative;
     }
 
-    /* Deep background layers */
     body::before {
       content: '';
       position: fixed;
@@ -34,23 +33,6 @@
       z-index: 0;
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.15) 0%, transparent 100%),
-        radial-gradient(1px 1px at 75% 30%, rgba(255,255,255,0.1) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,255,255,0.12) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 55%, rgba(255,255,255,0.08) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 90%, rgba(255,255,255,0.1) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 15% 85%, rgba(255,255,255,0.07) 0%, transparent 100%),
-        radial-gradient(1px 1px at 65% 10%, rgba(255,255,255,0.15) 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 45%, rgba(255,255,255,0.06) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
     canvas {
       position: fixed;
       inset: 0;
@@ -58,7 +40,6 @@
       z-index: 1;
     }
 
-    /* Main wrapper */
     .wrapper {
       position: relative;
       z-index: 2;
@@ -67,15 +48,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
     }
 
-    /* Top ornament line */
     .ornament-top {
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 0;
       margin-bottom: 28px;
     }
 
@@ -93,7 +71,6 @@
       box-shadow: 0 0 10px rgba(180,120,255,0.8);
     }
 
-    /* Header */
     .header {
       text-align: center;
       margin-bottom: 36px;
@@ -115,7 +92,6 @@
     }
 
     .header .sub {
-      font-family: 'Montserrat', sans-serif;
       font-size: 9px;
       letter-spacing: 7px;
       color: rgba(180,150,220,0.7);
@@ -136,7 +112,6 @@
       100% { background-position: 300% center; }
     }
 
-    /* Card */
     .card {
       width: 100%;
       background: linear-gradient(160deg,
@@ -151,7 +126,6 @@
       overflow: hidden;
     }
 
-    /* Corner accents */
     .card::before, .card::after {
       content: '';
       position: absolute;
@@ -159,32 +133,19 @@
       border-color: rgba(180,120,255,0.6);
       border-style: solid;
     }
-    .card::before {
-      top: -1px; left: -1px;
-      border-width: 2px 0 0 2px;
-    }
-    .card::after {
-      bottom: -1px; right: -1px;
-      border-width: 0 2px 2px 0;
-    }
+    .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
-    .card .corner-tr, .card .corner-bl {
+    .corner-tr, .corner-bl {
       position: absolute;
       width: 20px; height: 20px;
       border-color: rgba(120,180,255,0.6);
       border-style: solid;
     }
-    .card .corner-tr {
-      top: -1px; right: -1px;
-      border-width: 2px 2px 0 0;
-    }
-    .card .corner-bl {
-      bottom: -1px; left: -1px;
-      border-width: 0 0 2px 2px;
-    }
+    .corner-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
 
-    /* Sweep shimmer */
-    .card .sweep {
+    .sweep {
       position: absolute;
       top: 0; left: -100%;
       width: 60%; height: 100%;
@@ -198,7 +159,6 @@
       100% { left: 200%; }
     }
 
-    /* Upload area */
     .upload-area {
       border: 1px solid rgba(180,120,255,0.25);
       border-radius: 2px;
@@ -208,7 +168,6 @@
       transition: all 0.4s ease;
       background: rgba(255,255,255,0.015);
       margin-bottom: 28px;
-      position: relative;
     }
 
     .upload-area:hover {
@@ -242,13 +201,12 @@
       font-size: 11px;
       color: rgba(180,220,255,0.8);
       letter-spacing: 1px;
-      margin-top: 6px;
       font-weight: 500;
+      display: none;
     }
 
     input[type="file"] { display: none; }
 
-    /* Buttons */
     .btn-wrap {
       display: flex;
       justify-content: center;
@@ -285,46 +243,23 @@
 
     .btn-primary:hover {
       border-color: rgba(200,150,255,0.9);
-      color: #ffffff;
-      box-shadow:
-        0 0 20px rgba(160,100,255,0.3),
-        0 0 40px rgba(160,100,255,0.15),
-        inset 0 0 20px rgba(160,100,255,0.1);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(160,100,255,0.3), 0 0 40px rgba(160,100,255,0.15), inset 0 0 20px rgba(160,100,255,0.1);
     }
 
-    .btn-primary::after {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 0; height: 0;
-      background: rgba(200,150,255,0.15);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: width 0.5s ease, height 0.5s ease;
-    }
+    .btn-primary span { position: relative; z-index: 1; }
 
-    .btn-primary:active::after {
-      width: 200px; height: 200px;
-    }
-
-    .btn-primary span {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Corner dots on button */
-    .btn-primary .b-tl, .btn-primary .b-tr,
-    .btn-primary .b-bl, .btn-primary .b-br {
+    .b-tl, .b-tr, .b-bl, .b-br {
       position: absolute;
       width: 4px; height: 4px;
       border-radius: 50%;
       background: rgba(180,120,255,0.8);
       transition: all 0.3s ease;
     }
-    .btn-primary .b-tl { top: -2px; left: -2px; }
-    .btn-primary .b-tr { top: -2px; right: -2px; }
-    .btn-primary .b-bl { bottom: -2px; left: -2px; }
-    .btn-primary .b-br { bottom: -2px; right: -2px; }
+    .b-tl { top: -2px; left: -2px; }
+    .b-tr { top: -2px; right: -2px; }
+    .b-bl { bottom: -2px; left: -2px; }
+    .b-br { bottom: -2px; right: -2px; }
 
     .btn-primary:hover .b-tl,
     .btn-primary:hover .b-tr,
@@ -334,7 +269,6 @@
       box-shadow: 0 0 8px rgba(200,150,255,1);
     }
 
-    /* Download button */
     .btn-download {
       position: relative;
       padding: 11px 32px;
@@ -356,26 +290,22 @@
 
     .btn-download:hover {
       border-color: rgba(100,255,200,0.9);
-      color: #ffffff;
-      box-shadow:
-        0 0 20px rgba(60,200,140,0.3),
-        0 0 40px rgba(60,200,140,0.15),
-        inset 0 0 20px rgba(60,200,140,0.08);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(60,200,140,0.3), 0 0 40px rgba(60,200,140,0.15), inset 0 0 20px rgba(60,200,140,0.08);
     }
 
-    .btn-download .b-tl, .btn-download .b-tr,
-    .btn-download .b-bl, .btn-download .b-br {
+    .btn-download .g-tl, .btn-download .g-tr,
+    .btn-download .g-bl, .btn-download .g-br {
       position: absolute;
       width: 4px; height: 4px;
       border-radius: 50%;
       background: rgba(80,200,160,0.8);
     }
-    .btn-download .b-tl { top: -2px; left: -2px; }
-    .btn-download .b-tr { top: -2px; right: -2px; }
-    .btn-download .b-bl { bottom: -2px; left: -2px; }
-    .btn-download .b-br { bottom: -2px; right: -2px; }
+    .btn-download .g-tl { top: -2px; left: -2px; }
+    .btn-download .g-tr { top: -2px; right: -2px; }
+    .btn-download .g-bl { bottom: -2px; left: -2px; }
+    .btn-download .g-br { bottom: -2px; right: -2px; }
 
-    /* Divider */
     .divider {
       display: flex;
       align-items: center;
@@ -394,10 +324,8 @@
       letter-spacing: 4px;
       color: rgba(180,150,220,0.35);
       text-transform: uppercase;
-      font-weight: 400;
     }
 
-    /* Loading */
     .loading {
       display: none;
       text-align: center;
@@ -408,7 +336,6 @@
       width: 100%;
       height: 1px;
       background: rgba(255,255,255,0.05);
-      border-radius: 1px;
       overflow: hidden;
       margin-bottom: 14px;
     }
@@ -438,10 +365,7 @@
       50% { opacity: 0.9; }
     }
 
-    /* Result */
-    .result-section {
-      display: none;
-    }
+    .result-section { display: none; }
 
     .images-row {
       display: grid;
@@ -453,7 +377,6 @@
       border: 1px solid rgba(180,120,255,0.15);
       border-radius: 1px;
       overflow: hidden;
-      position: relative;
     }
 
     .img-panel .panel-label {
@@ -464,7 +387,6 @@
       text-align: center;
       padding: 8px 0 6px;
       border-bottom: 1px solid rgba(180,120,255,0.1);
-      font-weight: 400;
     }
 
     .img-panel img {
@@ -473,43 +395,39 @@
       object-fit: contain;
       display: block;
       padding: 8px;
-      background:
-        repeating-conic-gradient(rgba(255,255,255,0.03) 0% 25%, transparent 0% 50%)
-        0 0 / 12px 12px;
+      background: repeating-conic-gradient(rgba(255,255,255,0.03) 0% 25%, transparent 0% 50%) 0 0 / 12px 12px;
     }
 
-    /* Bottom ornament */
     .ornament-bottom {
       margin-top: 28px;
       text-align: center;
     }
 
-    .ornament-bottom .brand-small {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 10px;
-      letter-spacing: 6px;
-      color: rgba(180,120,255,0.3);
-      text-transform: uppercase;
-      font-weight: 400;
-    }
-
-    .ornament-bottom .orn-line {
+    .orn-line {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 10px;
     }
 
-    .ornament-bottom .orn-line .l {
+    .orn-line .l {
       flex: 1;
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(180,120,255,0.3), transparent);
     }
 
-    .ornament-bottom .orn-line .d {
+    .orn-line .d {
       width: 4px; height: 4px;
       border: 1px solid rgba(180,120,255,0.5);
       transform: rotate(45deg);
+    }
+
+    .brand-small {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: rgba(180,120,255,0.3);
+      text-transform: uppercase;
     }
   </style>
 </head>
@@ -536,15 +454,13 @@
     <div class="corner-bl"></div>
     <div class="sweep"></div>
 
-    <!-- Upload area -->
     <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
       <span class="upload-title">Select Image</span>
       <p class="upload-hint" id="uploadHint">Click to browse</p>
-      <p class="file-selected" id="fileName" style="display:none"></p>
+      <p class="file-selected" id="fileName"></p>
     </div>
     <input type="file" id="fileInput" accept="image/*" onchange="onFile(this)">
 
-    <!-- Upload Button -->
     <div class="btn-wrap">
       <button class="btn-primary" onclick="upload()">
         <div class="b-tl"></div><div class="b-tr"></div>
@@ -553,20 +469,17 @@
       </button>
     </div>
 
-    <!-- Loading -->
     <div class="loading" id="loading">
       <div class="loading-bar"><div class="loading-bar-inner"></div></div>
       <p>Processing</p>
     </div>
 
-    <!-- Result -->
     <div class="result-section" id="resultSection">
       <div class="divider">
         <div class="d-line"></div>
         <span class="d-text">Result</span>
         <div class="d-line"></div>
       </div>
-
       <div class="images-row">
         <div class="img-panel">
           <div class="panel-label">Original</div>
@@ -577,11 +490,10 @@
           <img id="result" src="" alt="">
         </div>
       </div>
-
       <div class="btn-wrap" style="margin-top:20px; margin-bottom:0">
         <a class="btn-download" id="download" download="adeel-md-result.png">
-          <div class="b-tl"></div><div class="b-tr"></div>
-          <div class="b-bl"></div><div class="b-br"></div>
+          <div class="g-tl"></div><div class="g-tr"></div>
+          <div class="g-bl"></div><div class="g-br"></div>
           Download
         </a>
       </div>
@@ -591,9 +503,7 @@
 
   <div class="ornament-bottom">
     <div class="orn-line">
-      <div class="l"></div>
-      <div class="d"></div>
-      <div class="l"></div>
+      <div class="l"></div><div class="d"></div><div class="l"></div>
     </div>
     <p class="brand-small">ADEEL-MD &nbsp;&nbsp; VIP TOOLS</p>
   </div>
@@ -607,8 +517,9 @@ function onFile(input) {
   const file = input.files[0];
   if (!file) return;
   document.getElementById('uploadHint').style.display = 'none';
-  document.getElementById('fileName').style.display = 'block';
-  document.getElementById('fileName').textContent = file.name;
+  const fn = document.getElementById('fileName');
+  fn.style.display = 'block';
+  fn.textContent = file.name;
   document.getElementById('dropZone').classList.add('active');
 }
 
@@ -642,7 +553,7 @@ function upload() {
     });
 }
 
-// Particle system
+// Floating particle system
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 let W, H, particles = [];
@@ -655,45 +566,39 @@ resize();
 window.addEventListener('resize', resize);
 
 class Particle {
-  constructor() { this.reset(); }
-  reset() {
+  constructor() { this.reset(true); }
+  reset(init) {
     this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.size = Math.random() * 1.5 + 0.3;
-    this.speedY = -(Math.random() * 0.3 + 0.05);
-    this.speedX = (Math.random() - 0.5) * 0.1;
+    this.y = init ? Math.random() * H : H + 10;
+    this.size = Math.random() * 1.2 + 0.3;
+    this.speedY = -(Math.random() * 0.3 + 0.08);
+    this.speedX = (Math.random() - 0.5) * 0.12;
     this.life = 0;
-    this.maxLife = Math.random() * 200 + 100;
-    this.color = Math.random() > 0.5
-      ? `rgba(180,120,255,`
-      : `rgba(120,180,255,`;
+    this.maxLife = Math.random() * 180 + 80;
+    this.purple = Math.random() > 0.5;
   }
   draw() {
-    const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.6;
+    const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.55;
+    const color = this.purple ? `rgba(180,120,255,${alpha})` : `rgba(100,170,255,${alpha})`;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = this.color + alpha + ')';
-    ctx.shadowBlur = 6;
-    ctx.shadowColor = this.color + '0.4)';
+    ctx.fillStyle = color;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = color;
     ctx.fill();
   }
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
     this.life++;
-    if (this.life >= this.maxLife) this.reset();
+    if (this.life >= this.maxLife) this.reset(false);
   }
 }
 
-for (let i = 0; i < 80; i++) {
-  const p = new Particle();
-  p.life = Math.random() * p.maxLife;
-  particles.push(p);
-}
+for (let i = 0; i < 90; i++) { const p = new Particle(); p.life = Math.floor(Math.random() * p.maxLife); particles.push(p); }
 
 function animate() {
   ctx.clearRect(0, 0, W, H);
-  ctx.shadowBlur = 0;
   particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animate);
 }
