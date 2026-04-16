@@ -1,120 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <mcharset="UTF-8">
-  <title>Remove Background</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADEEL-MD REMOVE BACKGROUND</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: Arial;
+      min-height: 100vh;
+      background: #0a0a0f;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Deep background layers */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(90,40,140,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(20,80,160,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 10% 50%, rgba(140,30,80,0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.15) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 30%, rgba(255,255,255,0.1) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,255,255,0.12) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 55%, rgba(255,255,255,0.08) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 90%, rgba(255,255,255,0.1) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 15% 85%, rgba(255,255,255,0.07) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 10%, rgba(255,255,255,0.15) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 45%, rgba(255,255,255,0.06) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Main wrapper */
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Top ornament line */
+    .ornament-top {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+
+    .ornament-top .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180,120,255,0.6), rgba(120,180,255,0.6), transparent);
+    }
+
+    .ornament-top .diamond {
+      width: 6px; height: 6px;
+      background: linear-gradient(135deg, #cc88ff, #88ccff);
+      transform: rotate(45deg);
+      margin: 0 10px;
+      box-shadow: 0 0 10px rgba(180,120,255,0.8);
+    }
+
+    /* Header */
+    .header {
       text-align: center;
-      padding: 40px;
-      background: #f5f5f5;
+      margin-bottom: 36px;
     }
 
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .header .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      background: linear-gradient(135deg, #e8d5ff 0%, #b88fff 30%, #ffffff 50%, #88c4ff 70%, #d5eeff 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmerText 5s linear infinite;
+      display: block;
+      line-height: 1;
     }
 
-    img {
-      max-width: 100%;
-      margin-top: 15px;
-      border-radius: 8px;
+    .header .sub {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      letter-spacing: 7px;
+      color: rgba(180,150,220,0.7);
+      text-transform: uppercase;
+      margin-top: 10px;
+      font-weight: 300;
     }
 
-    button {
-      padding: 10px 20px;
-      border: none;
-      background: #007bff;
-      color: white;
-      border-radius: 5px;
+    .header .title-line {
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180,120,255,0.5), transparent);
+      margin: 12px auto 0;
+    }
+
+    @keyframes shimmerText {
+      0%   { background-position: 0% center; }
+      100% { background-position: 300% center; }
+    }
+
+    /* Card */
+    .card {
+      width: 100%;
+      background: linear-gradient(160deg,
+        rgba(255,255,255,0.04) 0%,
+        rgba(180,120,255,0.04) 50%,
+        rgba(120,180,255,0.04) 100%
+      );
+      border: 1px solid rgba(180,120,255,0.2);
+      border-radius: 2px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Corner accents */
+    .card::before, .card::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: rgba(180,120,255,0.6);
+      border-style: solid;
+    }
+    .card::before {
+      top: -1px; left: -1px;
+      border-width: 2px 0 0 2px;
+    }
+    .card::after {
+      bottom: -1px; right: -1px;
+      border-width: 0 2px 2px 0;
+    }
+
+    .card .corner-tr, .card .corner-bl {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: rgba(120,180,255,0.6);
+      border-style: solid;
+    }
+    .card .corner-tr {
+      top: -1px; right: -1px;
+      border-width: 2px 2px 0 0;
+    }
+    .card .corner-bl {
+      bottom: -1px; left: -1px;
+      border-width: 0 0 2px 2px;
+    }
+
+    /* Sweep shimmer */
+    .card .sweep {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(105deg, transparent, rgba(255,255,255,0.03), transparent);
+      animation: sweep 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sweep {
+      0%   { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    /* Upload area */
+    .upload-area {
+      border: 1px solid rgba(180,120,255,0.25);
+      border-radius: 2px;
+      padding: 28px 20px;
+      text-align: center;
       cursor: pointer;
+      transition: all 0.4s ease;
+      background: rgba(255,255,255,0.015);
+      margin-bottom: 28px;
+      position: relative;
     }
 
-    button:hover {
-      background: #0056b3;
+    .upload-area:hover {
+      border-color: rgba(180,120,255,0.6);
+      background: rgba(180,120,255,0.05);
     }
 
+    .upload-area.active {
+      border-color: rgba(120,200,255,0.7);
+      background: rgba(120,180,255,0.06);
+    }
+
+    .upload-area .upload-title {
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: rgba(180,150,220,0.6);
+      text-transform: uppercase;
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .upload-area .upload-hint {
+      font-size: 11px;
+      color: rgba(200,200,220,0.4);
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .upload-area .file-selected {
+      font-size: 11px;
+      color: rgba(180,220,255,0.8);
+      letter-spacing: 1px;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    input[type="file"] { display: none; }
+
+    /* Buttons */
+    .btn-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      position: relative;
+      padding: 11px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(230,210,255,0.95);
+      background: transparent;
+      border: 1px solid rgba(180,120,255,0.5);
+      border-radius: 1px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(120,60,200,0.3), rgba(60,120,220,0.3));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-primary:hover {
+      border-color: rgba(200,150,255,0.9);
+      color: #ffffff;
+      box-shadow:
+        0 0 20px rgba(160,100,255,0.3),
+        0 0 40px rgba(160,100,255,0.15),
+        inset 0 0 20px rgba(160,100,255,0.1);
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      background: rgba(200,150,255,0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+    }
+
+    .btn-primary:active::after {
+      width: 200px; height: 200px;
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Corner dots on button */
+    .btn-primary .b-tl, .btn-primary .b-tr,
+    .btn-primary .b-bl, .btn-primary .b-br {
+      position: absolute;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(180,120,255,0.8);
+      transition: all 0.3s ease;
+    }
+    .btn-primary .b-tl { top: -2px; left: -2px; }
+    .btn-primary .b-tr { top: -2px; right: -2px; }
+    .btn-primary .b-bl { bottom: -2px; left: -2px; }
+    .btn-primary .b-br { bottom: -2px; right: -2px; }
+
+    .btn-primary:hover .b-tl,
+    .btn-primary:hover .b-tr,
+    .btn-primary:hover .b-bl,
+    .btn-primary:hover .b-br {
+      background: rgba(200,180,255,1);
+      box-shadow: 0 0 8px rgba(200,150,255,1);
+    }
+
+    /* Download button */
+    .btn-download {
+      position: relative;
+      padding: 11px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(180,240,220,0.95);
+      background: transparent;
+      border: 1px solid rgba(80,200,160,0.5);
+      border-radius: 1px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      text-decoration: none;
+      display: none;
+    }
+
+    .btn-download:hover {
+      border-color: rgba(100,255,200,0.9);
+      color: #ffffff;
+      box-shadow:
+        0 0 20px rgba(60,200,140,0.3),
+        0 0 40px rgba(60,200,140,0.15),
+        inset 0 0 20px rgba(60,200,140,0.08);
+    }
+
+    .btn-download .b-tl, .btn-download .b-tr,
+    .btn-download .b-bl, .btn-download .b-br {
+      position: absolute;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(80,200,160,0.8);
+    }
+    .btn-download .b-tl { top: -2px; left: -2px; }
+    .btn-download .b-tr { top: -2px; right: -2px; }
+    .btn-download .b-bl { bottom: -2px; left: -2px; }
+    .btn-download .b-br { bottom: -2px; right: -2px; }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .divider .d-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180,120,255,0.25), transparent);
+    }
+
+    .divider .d-text {
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: rgba(180,150,220,0.35);
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    /* Loading */
     .loading {
       display: none;
-      margin-top: 10px;
-      color: #555;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .loading-bar {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 1px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .loading-bar-inner {
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, rgba(180,120,255,0.9), rgba(120,180,255,0.9), transparent);
+      animation: loadSlide 1.8s ease-in-out infinite;
+    }
+
+    @keyframes loadSlide {
+      0%   { transform: translateX(-150%); }
+      100% { transform: translateX(350%); }
+    }
+
+    .loading p {
+      font-size: 8px;
+      letter-spacing: 5px;
+      color: rgba(180,150,220,0.5);
+      text-transform: uppercase;
+      animation: fadePulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes fadePulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.9; }
+    }
+
+    /* Result */
+    .result-section {
+      display: none;
+    }
+
+    .images-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .img-panel {
+      border: 1px solid rgba(180,120,255,0.15);
+      border-radius: 1px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .img-panel .panel-label {
+      font-size: 7px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(180,150,220,0.4);
+      text-align: center;
+      padding: 8px 0 6px;
+      border-bottom: 1px solid rgba(180,120,255,0.1);
+      font-weight: 400;
+    }
+
+    .img-panel img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      display: block;
+      padding: 8px;
+      background:
+        repeating-conic-gradient(rgba(255,255,255,0.03) 0% 25%, transparent 0% 50%)
+        0 0 / 12px 12px;
+    }
+
+    /* Bottom ornament */
+    .ornament-bottom {
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    .ornament-bottom .brand-small {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: rgba(180,120,255,0.3);
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    .ornament-bottom .orn-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .ornament-bottom .orn-line .l {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180,120,255,0.3), transparent);
+    }
+
+    .ornament-bottom .orn-line .d {
+      width: 4px; height: 4px;
+      border: 1px solid rgba(180,120,255,0.5);
+      transform: rotate(45deg);
     }
   </style>
 </head>
 <body>
 
-<div class="box">
-  <h2>Remove Background</h2>
+<canvas id="c"></canvas>
 
-  <input type="file" id="file"><br><br>
+<div class="wrapper">
 
-  <button onclick="upload()">Upload & Remove BG</button>
+  <div class="ornament-top">
+    <div class="line"></div>
+    <div class="diamond"></div>
+    <div class="line"></div>
+  </div>
 
-  <div class="loading" id="loading">Processing...</div>
+  <div class="header">
+    <span class="brand">ADEEL-MD</span>
+    <div class="title-line"></div>
+    <p class="sub">Remove Background</p>
+  </div>
 
-  <h3>Preview</h3>
-  <img id="preview">
+  <div class="card">
+    <div class="corner-tr"></div>
+    <div class="corner-bl"></div>
+    <div class="sweep"></div>
 
-  <h3>Result</h3>
-  <img id="result">
+    <!-- Upload area -->
+    <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <span class="upload-title">Select Image</span>
+      <p class="upload-hint" id="uploadHint">Click to browse</p>
+      <p class="file-selected" id="fileName" style="display:none"></p>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" onchange="onFile(this)">
 
-  <br><br>
-  <a id="download" style="display:none;" download="result.png">Download Image</a>
+    <!-- Upload Button -->
+    <div class="btn-wrap">
+      <button class="btn-primary" onclick="upload()">
+        <div class="b-tl"></div><div class="b-tr"></div>
+        <div class="b-bl"></div><div class="b-br"></div>
+        <span>Remove Background</span>
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+      <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+      <p>Processing</p>
+    </div>
+
+    <!-- Result -->
+    <div class="result-section" id="resultSection">
+      <div class="divider">
+        <div class="d-line"></div>
+        <span class="d-text">Result</span>
+        <div class="d-line"></div>
+      </div>
+
+      <div class="images-row">
+        <div class="img-panel">
+          <div class="panel-label">Original</div>
+          <img id="preview" src="" alt="">
+        </div>
+        <div class="img-panel">
+          <div class="panel-label">Result</div>
+          <img id="result" src="" alt="">
+        </div>
+      </div>
+
+      <div class="btn-wrap" style="margin-top:20px; margin-bottom:0">
+        <a class="btn-download" id="download" download="adeel-md-result.png">
+          <div class="b-tl"></div><div class="b-tr"></div>
+          <div class="b-bl"></div><div class="b-br"></div>
+          Download
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ornament-bottom">
+    <div class="orn-line">
+      <div class="l"></div>
+      <div class="d"></div>
+      <div class="l"></div>
+    </div>
+    <p class="brand-small">ADEEL-MD &nbsp;&nbsp; VIP TOOLS</p>
+  </div>
+
 </div>
 
 <script>
 const WORKER_URL = "https://jerrycoder.oggyapi.workers.dev/rembg";
 
-function upload() {
-  const fileInput = document.getElementById("file");
-  const file = fileInput.files[0];
-
-  if (!file) {
-    alert("Select an image first!");
-    return;
-  }
-
-  document.getElementById("preview").src = URL.createObjectURL(file);
-
-  const formData = new FormData();
-  formData.append("file", file);
-
-  document.getElementById("loading").style.display = "block";
-
-  fetch(WORKER_URL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("loading").style.display = "none";
-
-    if (data.status !== "success") {
-      alert("Failed: " + JSON.stringify(data));
-      return;
-    }
-
-    const imageUrl = data.result.url;
-
-    document.getElementById("result").src = imageUrl;
-
-    // Download button
-    const dl = document.getElementById("download");
-    dl.href = imageUrl;
-    dl.style.display = "inline";
-    dl.innerText = "Download Image";
-  })
-  .catch(err => {
-    document.getElementById("loading").style.display = "none";
-    alert("Error: " + err.message);
-  });
+function onFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('uploadHint').style.display = 'none';
+  document.getElementById('fileName').style.display = 'block';
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('dropZone').classList.add('active');
 }
-</script>
 
+function upload() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) { alert('Please select an image first.'); return; }
+
+  document.getElementById('preview').src = URL.createObjectURL(file);
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('download').style.display = 'none';
+
+  const fd = new FormData();
+  fd.append('file', file);
+
+  fetch(WORKER_URL, { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('loading').style.display = 'none';
+      if (data.status !== 'success') { alert('Failed: ' + JSON.stringify(data)); return; }
+      const url = data.result.url;
+      document.getElementById('result').src = url;
+      document.getElementById('resultSection').style.display = 'block';
+      const dl = document.getElementById('download');
+      dl.href = url;
+      dl.style.display = 'inline-block';
+    })
+    .catch(err => {
+      document.getElementById('loading').style.display = 'none';
+      alert('Error: ' + err.message);
+    });
+}
+
+// Particle system
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedY = -(Math.random() * 0.3 + 0.05);
+    this.speedX = (Math.random() - 0.5) * 0.1;
+    this.life = 0;
+    this.maxLife = Math.random() * 200 + 100;
+    this.color = Math.random() > 0.5
+      ? `rgba(180,120,255,`
+      : `rgba(120,180,255,`;
+  }
+  draw() {
+    const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.6;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + alpha + ')';
+    ctx.shadowBlur = 6;
+    ctx.shadowColor = this.color + '0.4)';
+    ctx.fill();
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.life++;
+    if (this.life >= this.maxLife) this.reset();
+  }
+}
+
+for (let i = 0; i < 80; i++) {
+  const p = new Particle();
+  p.life = Math.random() * p.maxLife;
+  particles.push(p);
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.shadowBlur = 0;
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
 </body>
 </html>
