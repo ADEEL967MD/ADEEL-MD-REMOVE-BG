@@ -1,118 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <mcharset="UTF-8">
-  <title>Remove Background</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>ADEEL-MD | Remove Background</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
-      text-align: center;
-      padding: 40px;
-      background: #f5f5f5;
-    }
-
-    .box {
-      background: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    img {
-      max-width: 100%;
-      margin-top: 15px;
-      border-radius: 8px;
+    .container {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
     }
 
-    button {
-      padding: 10px 20px;
-      border: none;
-      background: #007bff;
+    /* Main Card */
+    .card {
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      backdrop-filter: blur(0px);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      text-align: center;
       color: white;
-      border-radius: 5px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* Content */
+    .content {
+      padding: 30px;
+    }
+
+    /* Upload Area */
+    .upload-area {
+      border: 2px dashed #e2e8f0;
+      border-radius: 20px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fafbfc;
+      margin-bottom: 30px;
+    }
+
+    .upload-area:hover {
+      border-color: #667eea;
+      background: #f5f3ff;
+    }
+
+    .upload-area.drag-over {
+      border-color: #667eea;
+      background: #ede9fe;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .upload-area p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .upload-area .small-text {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+
+    /* Hide file input */
+    #fileInput {
+      display: none;
+    }
+
+    /* Loading */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .loading-card {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    .loading-card p {
+      color: #475569;
+      font-size: 14px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Image Grid */
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .image-card {
+      background: #f8fafc;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .image-card:hover {
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .image-label {
+      background: #f1f5f9;
+      padding: 12px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: #475569;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .image-label.original {
+      background: #e0e7ff;
+      color: #4f46e5;
+    }
+
+    .image-label.result {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .image-wrapper {
+      padding: 20px;
+      text-align: center;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-wrapper img {
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .empty-image {
+      color: #94a3b8;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* Download Button */
+    .download-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(34,197,94,0.3);
+      border: none;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0056b3;
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(34,197,94,0.4);
     }
 
-    .loading {
-      display: none;
-      margin-top: 10px;
-      color: #555;
+    .download-btn.disabled {
+      background: #cbd5e1;
+      box-shadow: none;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Footer */
+    .footer {
+      background: #f8fafc;
+      padding: 15px 30px;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .footer p {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .image-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="box">
-  <h2>Remove Background</h2>
+<div class="container">
+  <div class="card">
+    <div class="header">
+      <h1>✨ Remove Background</h1>
+      <p>AI-Powered Background Removal</p>
+      <div class="badge">⚡ Instant & Free</div>
+    </div>
 
-  <input type="file" id="file"><br><br>
+    <div class="content">
+      <!-- Upload Area -->
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">📸</div>
+        <p><strong>Click or drag & drop</strong> to upload image</p>
+        <p class="small-text">PNG, JPG, JPEG up to 10MB</p>
+      </div>
+      <input type="file" id="fileInput" accept="image/*">
 
-  <button onclick="upload()">Upload & Remove BG</button>
+      <!-- Image Grid -->
+      <div class="image-grid" id="imageGrid" style="display: none;">
+        <div class="image-card">
+          <div class="image-label original">🖼️ Original Image</div>
+          <div class="image-wrapper">
+            <img id="originalImg" alt="Original">
+          </div>
+        </div>
+        <div class="image-card">
+          <div class="image-label result">✨ Removed Background</div>
+          <div class="image-wrapper">
+            <img id="resultImg" alt="Result">
+          </div>
+        </div>
+      </div>
 
-  <div class="loading" id="loading">Processing...</div>
+      <!-- Download Button -->
+      <div class="download-section">
+        <button class="download-btn disabled" id="downloadBtn" disabled>
+          ⬇️ Download Image
+        </button>
+      </div>
+    </div>
 
-  <h3>Preview</h3>
-  <img id="preview">
+    <div class="footer">
+      <p>Powered by ADEEL-MD • Background Removal API</p>
+    </div>
+  </div>
+</div>
 
-  <h3>Result</h3>
-  <img id="result">
-
-  <br><br>
-  <a id="download" style="display:none;" download="result.png">Download Image</a>
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-card">
+    <div class="spinner"></div>
+    <p>✨ Removing background...</p>
+    <p style="font-size: 12px; margin-top: 8px;">This may take a few seconds</p>
+  </div>
 </div>
 
 <script>
 const WORKER_URL = "https://jerrycoder.oggyapi.workers.dev/rembg";
 
-function upload() {
-  const fileInput = document.getElementById("file");
-  const file = fileInput.files[0];
+// DOM Elements
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+const imageGrid = document.getElementById('imageGrid');
+const originalImg = document.getElementById('originalImg');
+const resultImg = document.getElementById('resultImg');
+const downloadBtn = document.getElementById('downloadBtn');
+const loadingOverlay = document.getElementById('loadingOverlay');
 
-  if (!file) {
-    alert("Select an image first!");
+// Auto process when file is selected
+async function processFile(file) {
+  if (!file) return;
+  
+  // Check file size (max 10MB)
+  if (file.size > 10 * 1024 * 1024) {
+    alert('❌ File is too large! Maximum size is 10MB.');
     return;
   }
-
-  document.getElementById("preview").src = URL.createObjectURL(file);
-
+  
+  // Check file type
+  if (!file.type.startsWith('image/')) {
+    alert('❌ Please select an image file (PNG, JPG, JPEG)');
+    return;
+  }
+  
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    originalImg.src = e.target.result;
+    imageGrid.style.display = 'grid';
+  };
+  reader.readAsDataURL(file);
+  
+  // Show loading
+  loadingOverlay.style.display = 'flex';
+  
+  // Disable download button
+  downloadBtn.disabled = true;
+  downloadBtn.classList.add('disabled');
+  resultImg.alt = 'Processing...';
+  
+  // Upload and remove background
   const formData = new FormData();
-  formData.append("file", file);
-
-  document.getElementById("loading").style.display = "block";
-
-  fetch(WORKER_URL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("loading").style.display = "none";
-
-    if (data.status !== "success") {
-      alert("Failed: " + JSON.stringify(data));
-      return;
+  formData.append('file', file);
+  
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (data.status === 'success') {
+      const imageUrl = data.result.url;
+      resultImg.src = imageUrl;
+      
+      // Enable download button
+      downloadBtn.disabled = false;
+      downloadBtn.classList.remove('disabled');
+      
+      // Set download link
+      downloadBtn.onclick = () => {
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = 'background_removed.png';
+        link.click();
+      };
+      
+    } else {
+      alert('❌ Failed to remove background: ' + JSON.stringify(data));
+      resultImg.alt = 'Failed to process';
     }
+  } catch (err) {
+    console.error('Error:', err);
+    alert('❌ Error: ' + err.message);
+    resultImg.alt = 'Error occurred';
+  } finally {
+    loadingOverlay.style.display = 'none';
+  }
+}
 
-    const imageUrl = data.result.url;
+// Trigger file selection
+uploadArea.addEventListener('click', () => {
+  fileInput.click();
+});
 
-    document.getElementById("result").src = imageUrl;
+// Handle file selection
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files && e.target.files[0]) {
+    processFile(e.target.files[0]);
+  }
+});
 
-    // Download button
-    const dl = document.getElementById("download");
-    dl.href = imageUrl;
-    dl.style.display = "inline";
-    dl.innerText = "Download Image";
-  })
-  .catch(err => {
-    document.getElementById("loading").style.display = "none";
-    alert("Error: " + err.message);
-  });
+// Drag and drop functionality
+uploadArea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadArea.classList.add('drag-over');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+  uploadArea.classList.remove('drag-over');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadArea.classList.remove('drag-over');
+  
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    processFile(file);
+    fileInput.files = e.dataTransfer.files;
+  } else {
+    alert('❌ Please drop an image file');
+  }
+});
+
+// Reset function (optional)
+function reset() {
+  imageGrid.style.display = 'none';
+  originalImg.src = '';
+  resultImg.src = '';
+  downloadBtn.disabled = true;
+  downloadBtn.classList.add('disabled');
+  fileInput.value = '';
 }
 </script>
 
